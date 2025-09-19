@@ -47,6 +47,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # 🔎 Paso de debug para ver cómo llega REGISTRY
+      - name: Debug REGISTRY value
+        run: |
+          echo "REGISTRY raw value between brackets:"
+          echo "[${{ vars.REGISTRY }}]"
+          echo "REGISTRY with cat -A (muestra caracteres ocultos):"
+          echo "${{ vars.REGISTRY }}" | cat -A
+
       # 4. Construir imagen Docker
       - name: Build Docker image
         run: |
