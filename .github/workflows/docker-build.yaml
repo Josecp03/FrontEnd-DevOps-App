@@ -50,11 +50,11 @@ jobs:
       # 🔎 Debug variables críticas
       - name: Debug Docker variables
         run: |
-          echo "REGISTRY: [${{ vars.REGISTRY }}]"
+          echo "REGISTRY raw value between brackets: [${{ vars.REGISTRY }}]"
+          echo "REGISTRY with cat -A (muestra caracteres ocultos):"
+          echo "${{ vars.REGISTRY }}" | cat -A
           echo "IMAGE_NAME: [${{ env.IMAGE_NAME }}]"
           echo "TAG: [${{ steps.version.outputs.newTag }}]"
-          echo "Command to run:"
-          echo "docker build -t ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.newTag }} ."
 
       # 🔎 Verificar archivos del contexto Docker
       - name: Check context files
@@ -62,15 +62,19 @@ jobs:
           ls -la
           if [ -f Dockerfile ]; then echo "Dockerfile found"; else echo "Dockerfile missing!"; fi
 
-      # 4. Construir imagen Docker (modo verbose)
+      # 4. Construir imagen Docker (limpiando \r)
       - name: Build Docker image
         run: |
           set -x
-          docker build -t ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.newTag }} .
-          docker tag ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.newTag }} ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          # Limpiar caracteres CR (\r) en REGISTRY
+          REGISTRY_CLEAN=$(echo "${{ vars.REGISTRY }}" | tr -d '\r')
+          echo "Using cleaned REGISTRY: [$REGISTRY_CLEAN]"
+          docker build -t $REGISTRY_CLEAN/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.newTag }} .
+          docker tag $REGISTRY_CLEAN/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.newTag }} $REGISTRY_CLEAN/${{ env.IMAGE_NAME }}:latest
 
       # 5. Subir la imagen a ACR
       - name: Push Docker image
         run: |
-          docker push ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.newTag }}
-          docker push ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          REGISTRY_CLEAN=$(echo "${{ vars.REGISTRY }}" | tr -d '\r')
+          docker push $REGISTRY_CLEAN/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.newTag }}
+          docker push $REGISTRY_CLEAN/${{ env.IMAGE_NAME }}:latest
