@@ -33,3 +33,7 @@ EXPOSE 80
 
 # Comando para iniciar Nginx en primer plano, lo que es necesario para que el contenedor se mantenga activo
 CMD ["nginx", "-g", "daemon off;"]
+
+
+
+
