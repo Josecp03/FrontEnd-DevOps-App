@@ -5,9 +5,12 @@ on:
     branches:
       - main
     paths:
-      - '**/*'   
-    paths-ignore:
-      - '.github/**'
+      - 'src/**'
+      - 'public/**'
+      - 'Dockerfile'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'nginx.conf'
   
   workflow_dispatch: 
 
