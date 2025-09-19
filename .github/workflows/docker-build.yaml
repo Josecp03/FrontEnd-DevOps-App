@@ -50,11 +50,11 @@ jobs:
       # 4. Construir imagen Docker
       - name: Build Docker image
         run: |
-          docker build -t ${{ vars.REGISTRY }}/$IMAGE_NAME:${{ steps.version.outputs.newTag }} .
-          docker tag ${{ vars.REGISTRY }}/$IMAGE_NAME:${{ steps.version.outputs.newTag }} ${{ vars.REGISTRY }}/$IMAGE_NAME:latest
+          docker build -t ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.newTag }} .
+          docker tag ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.newTag }} ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
       # 5. Subir la imagen a ACR
       - name: Push Docker image
         run: |
-          docker push ${{ vars.REGISTRY }}/$IMAGE_NAME:${{ steps.version.outputs.newTag }}
-          docker push ${{ vars.REGISTRY }}/$IMAGE_NAME:latest
+          docker push ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.newTag }}
+          docker push ${{ vars.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
