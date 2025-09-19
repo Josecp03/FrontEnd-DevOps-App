@@ -38,7 +38,7 @@ jobs:
       # 3. Configurar versión semántica automática
       - name: Bump version
         id: version
-        uses: phips28/gh-action-bump-version@v10
+        uses: phips28/gh-action-bump-version@v11.0.7
         with:
           tag-prefix: ""   
         env:
