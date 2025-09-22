@@ -113,5 +113,3 @@ Para validar que todo funciona correctamente:
 * En el portal de **Azure Container Registry**, se puede comprobar que la nueva imagen aparece con la etiqueta generada y también con `latest`.
 
   ![](imgs/2.png)
-
-```
